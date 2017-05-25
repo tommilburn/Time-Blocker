@@ -4,21 +4,46 @@
 	<head>
 		<script src="options.js"></script>
 		<style>
+			body{
+				background-color: #eee;
+			}
+
 			h1{
 				text-align: center;
 			}
-			#saveButton{
+			button{
 				width: 100%;
 				padding: 1em;
 			}
+			#pause, #master, #block{
+				text-align: center;
+				margin-bottom: 1em;
+				padding: 1em;
+				background-color:white;
+			}
+			.pause{
+				display:hidden;
+			}
+			.visible{
+				display:inline;
+			}
+
 		</style>
 	</head>
 	<body>
 		<h1>Blocklist</h1>
-		<input type="checkbox">
-		<label>Active</label>
-		<textarea id="blocklist" rows="10" cols="30" name="blocklist"></textarea>
-		<button id="saveButton">Save</button>
+		<div id="master">
+			<input type="checkbox" id="activeToggle">
+			<label>Active</label>
+		</div>
+		<div id="pause" class="visible">
+			<p>Pause blocking for <input type="text" placeholder="5" size="4" id="pauseTime"> minutes</p>
+			<button id="pauseButton">Pause</button>
+		</div>
+		<div id="block">
+			<textarea id="blocklist" placholder="reddit.com" rows="10" cols="30" name="blocklist"></textarea>
+			<button id="saveButton">Save</button>
+		</div>
 	</body>
 </html>
 	

@@ -1,16 +1,14 @@
 {
-	"manifest_version": 2,
-	"name": "Time Blocker",
-	"description": "Blocks websites with a Popodoro-inspired timer option",
-	"version": "0.1",
-	"background":{
-		"scripts": ["options.js"]
-	},
-	"permissions": [
-		"tabs"
-	],
-	"browser_action":{
-		"default_popup": "options.html"
-	}
+    "manifest_version": 2,
+    "name": "Time Blocker",
+    "description": "Blocks websites with a Popodoro-inspired timer option",
+    "version": "0.1",
+    "background":{
+        "scripts": ["options.js"]
+    },
+    "permissions": [
+        "tabs"
+    ],
+    "options_page": "options.html"
 }
 
