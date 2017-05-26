@@ -1,6 +1,10 @@
-
+/*global
+chrome
+*/
+var blocklist;
 document.addEventListener("DOMContentLoaded", function () {
     'use strict';
+    localStorage.active = false;
     var blocklistBox = document.getElementById("blocklist");
     var saveButton = document.getElementById("saveButton");
     var activeToggle = document.getElementById("activeToggle");
@@ -8,8 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //when saving the sites the user has entered, use JSON object in local storage and filter empty lines
     saveButton.addEventListener('click', function () {
         console.log(blocklistBox.value);
-        var blocklist = blocklistBox.value;
-        blocklist = blocklist.split('\n');
+        blocklist = blocklistBox.value.split('\n');
         blocklist = blocklist.filter(Boolean);
         localStorage.blocklist = JSON.stringify(blocklist);
     });
@@ -22,30 +25,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //set up the block list text box
     if (Array.isArray(JSON.parse(localStorage.blocklist)) === true) {
-        blocklistBox.value = JSON.parse(localStorage.blocklist).join('\n');
+        blocklist = JSON.parse(localStorage.blocklist);
+        blocklistBox.value = blocklist.join('\n');
     } else {
         blocklistBox.value = "";
         localStorage.blocklist = "[]";
     }
 });
 
+function blockUrl(tabId) {
+    'use strict';
+    chrome.tabs.update(tabId, {url: "blocked.html"});
+}
+
+
+
 function checkUrlAgainstBlocklist(tab) {
     'use strict';
-    console.log(tab.url.indexOf("reddit.com"));
-    if (tab.url.indexOf("reddit.com") !== -1) {
-        chrome.tabs.update(tab.id, {url: "http://google.com"});
+    var i;
+    for (i = 0; i < blocklist.length; i += 1) {
+        if (tab.url.indexOf(blocklist[i]) !== -1) {
+            console.log("blockable: " + tab.url);
+            blockUrl(tab.id);
+        }
     }
 }
 
-function getTabs() {
+function checkTabs() {
     'use strict';
-    var blocklist = localStorage.blocklist.split('\n');
-    blocklist = blocklist.filter(Boolean);
-    console.log(blocklist);
-    chrome.tabs.query({}, function (tabs) {
-        var i;
-        for (i = 0; i < tabs.length; i += 1) {
-            checkUrlAgainstBlocklist(tabs[i]);
-        }
-    });
+    if (localStorage.active === "true") {
+        chrome.tabs.query({}, function (tabs) {
+            var i;
+            for (i = 0; i < tabs.length; i += 1) {
+                checkUrlAgainstBlocklist(tabs[i]);
+            }
+        });
+    }
+
 }
+
+chrome.tabs.onUpdated.addListener(checkTabs);
