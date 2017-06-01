@@ -4,7 +4,7 @@
     "description": "Blocks websites with a Popodoro-inspired timer option",
     "version": "0.1",
     "background":{
-        "scripts": ["options.js"]
+        "scripts": ["js/options.js"]
     },
     "permissions": [
         "tabs"
